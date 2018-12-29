@@ -31,13 +31,13 @@ room(pantry).
 room(study).
 
 
+/*clue_2 + clue 7*/
+suspect_in_room(study, barbara) :- !.
+suspect_in_room(bathroom, yolanda) :- !.
+
 /*clue_1 :-*/
 suspect_in_room(kitchen, X) :-
 	man(X).
-
-/*clue_2 + clue 7*/
-suspect_in_room(study, barbara).
-suspect_in_room(bathroom, yolanda).
 
 /*clue_3 :-*/
 suspect_in_room(bathroom, X) :-
@@ -60,6 +60,13 @@ suspect_in_room(living, X) :-
 ;
 	X = george.
 
+/*clue_4 :-*/
+ weapon_in_room(study, rope) :- !.
+
+/*clue_3 :-*/
+weapon_in_room(bathroom, bag) :- !, fail.
+weapon_in_room(dining, bag) :- !, fail.
+
 /*clue_1 :-*/
 weapon_in_room(kitchen, W) :-
 	weapon(W),
@@ -67,13 +74,6 @@ weapon_in_room(kitchen, W) :-
 	W \== knife,
 	W \== bag,
 	W \== firearm.
-
-/*clue_3 :-*/
-weapon_in_room(bathroom, bag) :- !, fail.
-weapon_in_room(dining, bag) :- !, fail.
-
-/*clue_4 :-*/
- weapon_in_room(study, rope) :- !.
 
 /* clue 6 */
 weapon_in_room(Room, knife) :-
