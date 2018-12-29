@@ -49,6 +49,11 @@ suspect_in_room(bathroom, X) :-
 suspect_in_room(study, X) :-
 	woman(X).
 
+/* clue 7 */
+suspect_in_room(R, yolanda) :-
+	R \== study,
+	R \== pantry.
+
 /* clue 5 */
 suspect_in_room(living, X) :-
 	X = john
