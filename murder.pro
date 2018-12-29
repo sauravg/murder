@@ -128,3 +128,8 @@ murder(X) :-
 	suspect(X),
 	suspect_in_room(Room, X).
 
+murder(X) :-
+    murder_weapon(W),
+    room(R),
+    weapon_in_room(R, W),
+    suspect_in_room(R, X).
