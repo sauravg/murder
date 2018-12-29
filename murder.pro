@@ -109,6 +109,7 @@ weapon_in_room(Room, knife) :-
 
 /* clue 8 */
 weapon_in_room(Room, firearm) :-
+    room(Room),
 	suspect_in_room(Room, george).
 
 /* clue 9 */
