@@ -35,35 +35,9 @@ room(study).
 suspect_in_room(kitchen, X) :-
 	man(X).
 
-/*clue_2 :-*/
-suspect_in_room(R, barbara) :-
-	/*
-	assertz(suspect_in_room(bathroom, yolanda)),
-	assertz(suspect_in_room(study, barbara)),
-	*/
-   room(R),
-	R == study,
-	suspect_in_room(bathroom, yolanda)
-;
-	R == bathroom,
-	suspect_in_room(study, yolanda).
-
-/*clue_2 :-*/
-suspect_in_room(R, yolanda) :-
-	/*
-	retract(suspect_in_room(study, barbara)),
-	retract(suspect_in_room(bathroom, yolanda)),
-	/* these are final */
-	 /*
-	assertz(suspect_in_room(study, yolanda)),
-	assertz(suspect_in_room(bathroom, barbara)),
-	*/
-   room(R),
-	R == study,
-	suspect_in_room(bathroom, barbara)
-;
-	R == bathroom,
-	suspect_in_room(study, barbara).
+/*clue_2 + clue 7*/
+suspect_in_room(study, barbara).
+suspect_in_room(bathroom, yolanda).
 
 /*clue_3 :-*/
 suspect_in_room(bathroom, X) :-
@@ -80,12 +54,6 @@ suspect_in_room(living, X) :-
 	X = john
 ;
 	X = george.
-
-/* clue 7 */
- suspect_in_room(Room, yolanda) :-
-	 room(Room),
-	 Room \== study,
-	 Room \== pantry.
 
 /*clue_1 :-*/
 weapon_in_room(kitchen, W) :-
