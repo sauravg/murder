@@ -83,10 +83,6 @@ weapon_in_room(Room, firearm) :-
 /* clue 9 */
  weapon_in_room(pantry, gas) :- !.
 
-weapon_in_room(Room, W) :-
-	room(Room),
-	weapon(W).
-
 murder_weapon(gas).
 murder_room(pantry).
 
