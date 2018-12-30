@@ -32,8 +32,8 @@ room(study).
 
 
 /*clue_2 + clue 7*/
-suspect_in_room(study, barbara) :- !.
-suspect_in_room(bathroom, yolanda) :- !.
+suspect_in_room_fact(study, barbara).
+suspect_in_room_fact(bathroom, yolanda).
 
 /*clue_1 :-*/
 suspect_in_room(kitchen, X) :-
@@ -90,29 +90,37 @@ weapon_in_room(Room, firearm) :-
 murder_weapon(gas).
 murder_room(pantry).
 
-could_be_in_room(Room, X) :-
-   suspect_in_room(Room, Y),
+suspect_could_be_in_room(Room, X) :-
+   suspect_in_room_fact(Room, Y),
    atom(Y),
    X \== Y,
    !,
    fail.
 
+suspect_could_be_in_room(Room, X) :-
+	suspect_in_room_fact(OtherRoom, X),
+	atom(OtherRoom),
+	OtherRoom \== Room,
+	!,
+	fail.
+
 % anybody could be in any room unless some clause proves otherwise
-could_be_in_room(Room, X) :-
+suspect_could_be_in_room(Room, X) :-
 	clause(suspect_in_room(Room, X), Body),
 	(call(Body) -> fail; !, fail).
 
 /* only comes here if no suspect_in_room/3 fails, i.e. explicitly
  * proves the suspect cannot be here. So the suspect could be in this room */
-could_be_in_room(_, _).
+suspect_could_be_in_room(_, _).
+
 
 murderer(X) :-
 	murder_room(Room),
 	suspect(X),
-	suspect_in_room(Room, X).
+	suspect_could_be_in_room(Room, X).
 
 murderer(X) :-
     murder_weapon(W),
     room(R),
     weapon_in_room(R, W),
-    suspect_in_room(R, X).
+    suspect_could_be_in_room(R, X).
