@@ -89,12 +89,12 @@ murder_weapon(gas).
 murder_room(pantry).
 
 
-murder(X) :-
+murderer(X) :-
 	murder_room(Room),
 	suspect(X),
 	suspect_in_room(Room, X).
 
-murder(X) :-
+murderer(X) :-
     murder_weapon(W),
     room(R),
     weapon_in_room(R, W),
