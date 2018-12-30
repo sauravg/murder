@@ -40,19 +40,16 @@ suspect_in_room(kitchen, X) :-
 	man(X).
 
 /*clue_3 :-*/
-suspect_in_room(bathroom, X) :-
-	suspect(X),
-	X \== barbara,
-	X \== george.
+suspect_in_room(bathroom, barbara) :- fail.
+suspect_in_room(bathroom, george) :- fail.
 
 /*clue_4 :-*/
 suspect_in_room(study, X) :-
 	woman(X).
 
 /* clue 7 */
-suspect_in_room(R, yolanda) :-
-	R \== study,
-	R \== pantry.
+suspect_in_room(study, yolanda) :- fail.
+suspect_in_room(pantry, yolanda) :- fail.
 
 /* clue 5 */
 suspect_in_room(living, X) :-
