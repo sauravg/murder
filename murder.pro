@@ -37,6 +37,7 @@ suspect_in_room(bathroom, yolanda) :- !.
 
 /*clue_1 :-*/
 suspect_in_room(kitchen, X) :-
+	atom(X),
 	man(X).
 
 /*clue_3 :-*/
@@ -45,6 +46,7 @@ suspect_in_room(bathroom, george) :- fail.
 
 /*clue_4 :-*/
 suspect_in_room(study, X) :-
+	atom(X),
 	woman(X).
 
 /* clue 7 */
@@ -53,9 +55,9 @@ suspect_in_room(pantry, yolanda) :- fail.
 
 /* clue 5 */
 suspect_in_room(living, X) :-
-	X = john
+	X == john
 ;
-	X = george.
+	X == george.
 
 /*clue_4 :-*/
  weapon_in_room(study, rope) :- !.
@@ -87,6 +89,13 @@ weapon_in_room(Room, firearm) :-
 
 murder_weapon(gas).
 murder_room(pantry).
+
+could_be_in_room(Room, X) :-
+   suspect_in_room(Room, Y),
+   atom(Y),
+   X \== Y,
+   !,
+   fail.
 
 % anybody could be in any room unless some clause proves otherwise
 could_be_in_room(Room, X) :-
