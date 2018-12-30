@@ -60,11 +60,11 @@ suspect_in_room(living, X) :-
 	X == george.
 
 /*clue_4 :-*/
- weapon_in_room(study, rope) :- !.
+ weapon_in_room(study, rope).
 
 /*clue_3 :-*/
-weapon_in_room(bathroom, bag) :- !, fail.
-weapon_in_room(dining, bag) :- !, fail.
+weapon_in_room(bathroom, bag) :- fail.
+weapon_in_room(dining, bag) :- fail.
 
 /*clue_1 :-*/
 weapon_in_room(kitchen, W) :-
@@ -85,7 +85,7 @@ weapon_in_room(Room, firearm) :-
 	suspect_in_room(Room, george).
 
 /* clue 9 */
- weapon_in_room(pantry, gas) :- !.
+ weapon_in_room(pantry, gas).
 
 murder_weapon(gas).
 murder_room(pantry).
