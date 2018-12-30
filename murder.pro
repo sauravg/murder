@@ -88,6 +88,14 @@ weapon_in_room(Room, firearm) :-
 murder_weapon(gas).
 murder_room(pantry).
 
+% anybody could be in any room unless some clause proves otherwise
+could_be_in_room(Room, X) :-
+	clause(suspect_in_room(Room, X), Body),
+	(call(Body) -> fail; !, fail).
+
+/* only comes here if no suspect_in_room/3 fails, i.e. explicitly
+ * proves the suspect cannot be here. So the suspect could be in this room */
+could_be_in_room(_, _).
 
 murderer(X) :-
 	murder_room(Room),
