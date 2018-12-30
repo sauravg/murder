@@ -67,21 +67,16 @@ weapon_in_room(bathroom, bag) :- fail.
 weapon_in_room(dining, bag) :- fail.
 
 /*clue_1 :-*/
-weapon_in_room(kitchen, W) :-
-	weapon(W),
-	W \== rope,
-	W \== knife,
-	W \== bag,
-	W \== firearm.
+weapon_in_room(kitchen, rope) :- fail.
+weapon_in_room(kitchen, knife) :- fail.
+weapon_in_room(kitchen, bag) :- fail.
+weapon_in_room(kitchen, firearm) :- fail.
 
 /* clue 6 */
-weapon_in_room(Room, knife) :-
-	room(Room),
-	Room \== dining.
+weapon_in_room(dining, knife) :- fail.
 
 /* clue 8 */
 weapon_in_room(Room, firearm) :-
-    room(Room),
 	suspect_in_room(Room, george).
 
 /* clue 9 */
