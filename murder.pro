@@ -109,6 +109,21 @@ suspect_could_be_in_room(Room, X) :-
  * proves the suspect cannot be here. So the suspect could be in this room */
 suspect_could_be_in_room(_, _).
 
+weapon_possibly_in_room(Room, W) :-
+    weapon_in_room_fact(Room, K),
+    W \= K,
+    !, fail.
+
+weapon_possibly_in_room(Room, W) :-
+    weapon_in_room_fact(OtherRoom, W),
+    OtherRoom \= Room,
+    !, fail.
+
+weapon_possibly_in_room(Room, W) :-
+    clause(weapon_in_room(Room, W), Body),
+    (call(Body) -> fail; !, fail).
+
+weapon_possibly_in_room(_, _).
 
 murderer(X) :-
 	murder_room(Room),
@@ -118,5 +133,5 @@ murderer(X) :-
 murderer(X) :-
     murder_weapon(W),
     room(R),
-    weapon_in_room(R, W),
+    weapon_possibly_in_room(R, W),
     suspect_could_be_in_room(R, X).
