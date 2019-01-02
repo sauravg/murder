@@ -1,5 +1,5 @@
 :- dynamic(suspect_in_room/2).
-:- dynamic(weapon_in_room/3).
+:- dynamic(weapon_in_room/2).
 
 suspect(george).
 suspect(john).
