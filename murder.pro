@@ -1,5 +1,8 @@
 :- dynamic(suspect_in_room/2).
 :- dynamic(weapon_in_room/2).
+:- dynamic(suspect_in_room_fact/2).
+:- dynamic(weapon_in_room_fact/2).
+:- initialization(investigate).
 
 suspect(george).
 suspect(john).
@@ -59,6 +62,10 @@ suspect_in_room(living, X) :-
 ;
 	X == george.
 
+/* clue 8 */
+suspect_in_room(Room, george) :-
+	weapon_possibly_in_room(Room, firearm).
+
 /*clue_4 :-*/
  weapon_in_room_fact(study, rope).
 
@@ -78,10 +85,6 @@ weapon_in_room(kitchen, firearm) :- fail.
 
 /* clue 6 */
 weapon_in_room(dining, knife) :- fail.
-
-/* clue 8 */
-weapon_in_room(Room, firearm) :-
-	suspect_could_be_in_room(Room, george).
 
 murder_weapon(gas).
 murder_room(pantry).
@@ -135,3 +138,73 @@ murderer(X) :-
     room(R),
     weapon_possibly_in_room(R, W),
     suspect_could_be_in_room(R, X).
+
+tie_suspects_to_rooms :-
+	room(R),
+	findall(X, (suspect(X), suspect_could_be_in_room(R, X)), L),
+	length(L, 1),
+	nth(1, L, S),
+	\+(suspect_in_room_fact(R, S)),
+	%format("Suspect ~w must have been in ~w", [S, R]), nl,
+	assertz(suspect_in_room_fact(R, S)),
+	fail.
+
+tie_suspects_to_rooms.
+
+tie_weapons_to_rooms :-
+	room(R),
+	findall(X, (weapon(X), weapon_possibly_in_room(R, X)), L),
+	%format("Possible weapons in room ~w are: ~w", [R, L]), nl,
+	length(L, 1),
+	nth(1, L, W),
+	\+(weapon_in_room_fact(R, W)),
+	%format("Weapon ~w must have been in ~w", [W, R]), nl,
+	assertz(weapon_in_room_fact(R, W)),
+	fail.
+
+tie_weapons_to_rooms.
+
+all_suspects_tied_to_rooms :-
+	findall(X, suspect(X), Suspects),
+	findall(Y, suspect_in_room_fact(_,Y), SuspectsTied),
+	length(Suspects, N),
+	length(SuspectsTied, NTied),
+	N == NTied.
+
+reduce_possibilities :-
+	tie_suspects_to_rooms,
+	tie_weapons_to_rooms,
+	/*
+	murder_room(R),
+	findall(X, (suspect(X), suspect_could_be_in_room(R, X)), L),
+	%format("Suspect list reduced to ~w", [L]), nl,
+	length(L, 1)
+	*/
+	all_suspects_tied_to_rooms
+	; reduce_possibilities.
+
+
+investigate :-
+	reduce_possibilities,
+	print_investigation_report.
+
+print_investigation_report :-
+	suspect(X),
+	suspect_in_room_fact(R, X),
+	weapon_in_room_fact(R, W),
+	format("~w was found in ~w with ~w", [X, R, W]), nl,
+	fail.
+
+print_investigation_report.
+
+answer_questions :-
+	suspect_in_room_fact(kitchen, SuspectInKitchen), format("Suspect ~w was found in the kitchen", [SuspectInKitchen]), nl,
+	weapon_in_room_fact(kitchen, WeaponInKitchen), format("Weapon ~w was found in the kitchen", [WeaponInKitchen]), nl,
+	suspect_in_room_fact(BarbarasRoom, barbara), format("Barbara was found in ~w", [BarbarasRoom]), nl,
+	weapon_in_room_fact(BagRoom, bag), suspect_in_room_fact(BagRoom, SuspectWithBag), format("~w was found with bag", [SuspectWithBag]), nl,
+	suspect_in_room_fact(study, SuspectInStudy), woman(SuspectInStudy), format("Suspect ~w (woman) was found in study", [SuspectInStudy]), nl,
+	weapon_in_room_fact(RoomWithKnfie, knife), format("Knife was found in ~w", [RoomWithKnfie]), nl,
+	suspect_in_room_fact(YolandasRoom, yolanda), weapon_in_room_fact(YolandasRoom, YolandasWeapon), format("Yolanda was found with ~w", [YolandasWeapon]), nl,
+	weapon_in_room_fact(RoomWithFirearm, firearm), format("Firearm was found in ~w", [RoomWithFirearm]), nl,
+	findall(X, murderer(X), M),
+	format("~w is the murderer", M), nl.
